@@ -26,6 +26,10 @@ namespace Bannerlord.ValorRebalanced
             if (mapEvent == null)
                 return false;
 
+            // Raids, hideouts, and other minor encounters → let vanilla handle them.
+            if (mapEvent.IsRaid || mapEvent.IsHideoutBattle)
+                return true;
+
             MapEventSide playerSide = mapEvent.Winner;
             if (playerSide == null || !playerSide.IsMainPartyAmongParties())
                 return false;
@@ -37,22 +41,18 @@ namespace Bannerlord.ValorRebalanced
                 .StrengthRatio;
 
             var settings = Settings.Instance;
-            float threshold = settings?.StrengthRatioThreshold ?? 9.0f;
             float minXp = settings?.MinXp ?? 5;
             float maxXp = settings?.MaxXp ?? 20;
-            float typeCap = GetBattleTypeCap(mapEvent, settings);
 
-            // Use the lower of threshold/cap as the start and the higher as the
-            // end.  This lets battle types whose cap is below the threshold
-            // (e.g. siege attack at 0.8) still grant valor at low ratios.
-            float rangeStart = Math.Min(threshold, typeCap);
-            float rangeEnd = Math.Max(threshold, typeCap);
+            GetBattleTypeRange(mapEvent, settings, out float threshold, out float cap);
 
-            if (strengthRatio > rangeStart)
+            // Misconfiguration guard: threshold must be less than cap.
+            if (threshold >= cap)
+                return false;
+
+            if (strengthRatio > threshold)
             {
-                float t = rangeEnd > rangeStart
-                    ? Math.Min(1f, (strengthRatio - rangeStart) / (rangeEnd - rangeStart))
-                    : 1f;
+                float t = Math.Min(1f, (strengthRatio - threshold) / (cap - threshold));
                 int valorXp = Math.Min(
                     (int)((minXp + t * (maxXp - minXp)) * contribution),
                     (int)(maxXp * contribution));
@@ -72,25 +72,31 @@ namespace Bannerlord.ValorRebalanced
             return false;
         }
 
-        private static float GetBattleTypeCap(MapEvent mapEvent, Settings settings)
+        private static void GetBattleTypeRange(
+            MapEvent mapEvent, Settings settings,
+            out float threshold, out float cap)
         {
             if (mapEvent.IsSiegeAssault)
             {
                 bool playerIsAttacker =
                     PlayerEncounter.Current.PlayerSide == BattleSideEnum.Attacker;
-                return playerIsAttacker
-                    ? (settings?.MaxRatioSiegeAttack ?? 10f)
-                    : (settings?.MaxRatioSiegeDefense ?? 10f);
+
+                if (playerIsAttacker)
+                {
+                    threshold = settings?.ThresholdSiegeAttack ?? 9f;
+                    cap = settings?.CapSiegeAttack ?? 10f;
+                }
+                else
+                {
+                    threshold = settings?.ThresholdSiegeDefense ?? 9f;
+                    cap = settings?.CapSiegeDefense ?? 10f;
+                }
+                return;
             }
 
-            if (mapEvent.IsRaid)
-                return settings?.MaxRatioRaid ?? 10f;
-
-            if (mapEvent.IsHideoutBattle)
-                return settings?.MaxRatioHideout ?? 10f;
-
             // Field battle, sally out, siege outside, and everything else.
-            return settings?.MaxRatioFieldBattle ?? 10f;
+            threshold = settings?.ThresholdFieldBattle ?? 9f;
+            cap = settings?.CapFieldBattle ?? 10f;
         }
     }
 }
