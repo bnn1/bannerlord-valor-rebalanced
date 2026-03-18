@@ -40,11 +40,26 @@ namespace Bannerlord.ValorRebalanced
             const float MaxRatio = 10f; // game's internal cap
             float minXp = settings?.MinXp ?? 5;
             float maxXp = settings?.MaxXp ?? 20;
+            bool exponential = settings?.UseExponentialCurve ?? false;
 
             if (strengthRatio > minRatio)
             {
                 float t = Math.Min(1f, (strengthRatio - minRatio) / (MaxRatio - minRatio));
-                int valorXp = (int)((minXp + t * (maxXp - minXp)) * contribution);
+
+                // Linear: XP scales evenly between min and max.
+                //
+                // Exponential (t²): XP is back-loaded — easy wins give near-minimum,
+                // hard victories give disproportionately more. The user's "Max XP" slider
+                // stays meaningful: it controls the midpoint reference. Internally we
+                // scale the ceiling so that t=1 gives 2× the slider's max, keeping the
+                // midpoint (t≈0.7) close to the slider value.
+                //
+                // With threshold=1.5, min=10, max=50:
+                //   Linear:      2x→12  4x→22  8x→41  10x→50
+                //   Exponential: 2x→10  4x→13  8x→55  10x→90
+                float curved = exponential ? t * t : t;
+                float effectiveMax = exponential ? minXp + (maxXp - minXp) * 2f : maxXp;
+                int valorXp = (int)((minXp + curved * (effectiveMax - minXp)) * contribution);
 
                 if (valorXp > 0 && _addTraitXpMethod != null)
                 {

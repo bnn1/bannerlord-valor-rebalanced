@@ -46,5 +46,15 @@ namespace Bannerlord.ValorRebalanced
                        "For reference: level 1 = 1000 XP, level 2 = 4000 XP. [Default: 20]")]
         [SettingPropertyGroup("Valor XP")]
         public int MaxXp { get; set; } = 20;
+
+        [SettingPropertyBool(
+            "Use Exponential Curve",
+            Order = 3,
+            RequireRestart = false,
+            HintText = "When enabled, easy victories give near-minimum XP while extreme outnumbering " +
+                       "gives much more than the Max XP slider value. Matches real difficulty scaling " +
+                       "where 8x is far harder than 4x, not just twice as hard. [Default: Off]")]
+        [SettingPropertyGroup("Valor XP")]
+        public bool UseExponentialCurve { get; set; } = false;
     }
 }

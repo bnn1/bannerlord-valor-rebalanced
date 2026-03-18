@@ -40,6 +40,7 @@ Open **Mod Options → Valor Rebalanced → Valor XP** in the game menu.
 | **Strength Ratio Threshold** | 1.0–10.0 | 9.0 | How much stronger the enemy must be before valor is awarded. Lower = easier. (1.5 = 50% stronger, 3.0 = 3x, 9.0 = vanilla) |
 | **Min XP per Battle** | 1–200 | 5 | XP when barely above the threshold |
 | **Max XP per Battle** | 1–500 | 20 | XP when massively outnumbered (10x, the game's cap) |
+| **Use Exponential Curve** | On/Off | Off | When on, easy wins give near-minimum XP while extreme outnumbering gives far beyond the Max slider value — matching how real difficulty scales |
 
 All values are scaled by your party's **contribution rate** — in large army battles where you're one of many parties, you'll earn proportionally less.
 
@@ -52,6 +53,7 @@ For a challenging but achievable valor progression:
 | Strength Ratio Threshold | **1.5** |
 | Min XP per Battle | **10** |
 | Max XP per Battle | **50** |
+| Use Exponential Curve | **On** |
 
 This makes Valor 1 achievable in ~20–100 qualifying battles and Valor 2 in ~80–400, depending on how outnumbered you are.
 
