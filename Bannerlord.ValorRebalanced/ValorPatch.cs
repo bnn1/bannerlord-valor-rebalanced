@@ -5,6 +5,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.CampaignSystem.MapEvents;
+using TaleWorlds.Core;
 
 namespace Bannerlord.ValorRebalanced
 {
@@ -36,30 +37,25 @@ namespace Bannerlord.ValorRebalanced
                 .StrengthRatio;
 
             var settings = Settings.Instance;
-            float minRatio = settings?.StrengthRatioThreshold ?? 9.0f;
-            const float MaxRatio = 10f; // game's internal cap
+            float threshold = settings?.StrengthRatioThreshold ?? 9.0f;
             float minXp = settings?.MinXp ?? 5;
             float maxXp = settings?.MaxXp ?? 20;
-            bool exponential = settings?.UseExponentialCurve ?? false;
+            float typeCap = GetBattleTypeCap(mapEvent, settings);
 
-            if (strengthRatio > minRatio)
+            // Use the lower of threshold/cap as the start and the higher as the
+            // end.  This lets battle types whose cap is below the threshold
+            // (e.g. siege attack at 0.8) still grant valor at low ratios.
+            float rangeStart = Math.Min(threshold, typeCap);
+            float rangeEnd = Math.Max(threshold, typeCap);
+
+            if (strengthRatio > rangeStart)
             {
-                float t = Math.Min(1f, (strengthRatio - minRatio) / (MaxRatio - minRatio));
-
-                // Linear: XP scales evenly between min and max.
-                //
-                // Exponential (t²): XP is back-loaded — easy wins give near-minimum,
-                // hard victories give disproportionately more. The user's "Max XP" slider
-                // stays meaningful: it controls the midpoint reference. Internally we
-                // scale the ceiling so that t=1 gives 2× the slider's max, keeping the
-                // midpoint (t≈0.7) close to the slider value.
-                //
-                // With threshold=1.5, min=10, max=50:
-                //   Linear:      2x→12  4x→22  8x→41  10x→50
-                //   Exponential: 2x→10  4x→13  8x→55  10x→90
-                float curved = exponential ? t * t : t;
-                float effectiveMax = exponential ? minXp + (maxXp - minXp) * 2f : maxXp;
-                int valorXp = (int)((minXp + curved * (effectiveMax - minXp)) * contribution);
+                float t = rangeEnd > rangeStart
+                    ? Math.Min(1f, (strengthRatio - rangeStart) / (rangeEnd - rangeStart))
+                    : 1f;
+                int valorXp = Math.Min(
+                    (int)((minXp + t * (maxXp - minXp)) * contribution),
+                    (int)(maxXp * contribution));
 
                 if (valorXp > 0 && _addTraitXpMethod != null)
                 {
@@ -74,6 +70,27 @@ namespace Bannerlord.ValorRebalanced
             }
 
             return false;
+        }
+
+        private static float GetBattleTypeCap(MapEvent mapEvent, Settings settings)
+        {
+            if (mapEvent.IsSiegeAssault)
+            {
+                bool playerIsAttacker =
+                    PlayerEncounter.Current.PlayerSide == BattleSideEnum.Attacker;
+                return playerIsAttacker
+                    ? (settings?.MaxRatioSiegeAttack ?? 10f)
+                    : (settings?.MaxRatioSiegeDefense ?? 10f);
+            }
+
+            if (mapEvent.IsRaid)
+                return settings?.MaxRatioRaid ?? 10f;
+
+            if (mapEvent.IsHideoutBattle)
+                return settings?.MaxRatioHideout ?? 10f;
+
+            // Field battle, sally out, siege outside, and everything else.
+            return settings?.MaxRatioFieldBattle ?? 10f;
         }
     }
 }
