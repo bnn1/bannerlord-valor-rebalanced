@@ -65,7 +65,7 @@ This makes Valor 1 achievable in ~20–100 qualifying battles and Valor 2 in ~80
 1. Install the requirements above if you haven't already.
 2. Extract the `Bannerlord.FixValor` folder into your game's `Modules` directory:
    ```
-   <game>\Modules\Bannerlord.FixValor\
+   \Modules\Bannerlord.FixValor\
        SubModule.xml
        bin\Win64_Shipping_Client\Bannerlord.FixValor.dll
    ```
