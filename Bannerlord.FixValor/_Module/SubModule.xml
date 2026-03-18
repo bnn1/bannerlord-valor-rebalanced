@@ -9,6 +9,7 @@
 	<ModuleType value="Community" />
 	<DependedModules>
 		<DependedModule Id="Bannerlord.Harmony" />
+		<DependedModule Id="Bannerlord.MBOptionScreen" />
 		<DependedModule Id="Native" DependentVersion="v$gameversion$" />
 		<DependedModule Id="SandBoxCore" DependentVersion="v$gameversion$" />
 		<DependedModule Id="Sandbox" DependentVersion="v$gameversion$" />
@@ -18,6 +19,7 @@
 	<!-- https://github.com/BUTR/Bannerlord.BUTRLoader#for-modders -->
 	<DependedModuleMetadatas>
 		<DependedModuleMetadata id="Bannerlord.Harmony" order="LoadBeforeThis" version="v2.*" />
+		<DependedModuleMetadata id="Bannerlord.MBOptionScreen" order="LoadBeforeThis" version="v5.*" />
 		<DependedModuleMetadata id="Native" order="LoadBeforeThis" version="$gameversion$.*" />
 		<DependedModuleMetadata id="SandBoxCore" order="LoadBeforeThis" version="$gameversion$.*" />
 		<DependedModuleMetadata id="Sandbox" order="LoadBeforeThis" version="$gameversion$.*" />
