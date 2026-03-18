@@ -80,4 +80,8 @@ This makes Valor 1 achievable in ~20–100 qualifying battles and Valor 2 in ~80
 
 ## Source Code
 
-[GitHub](https://github.com/ivokosir/Bannerlord.FixValor)
+[GitHub](https://github.com/bnn1/bannerlord-valor-rebalanced)
+
+## Credits
+
+[Fix Valor](https://github.com/ivokosir/Bannerlord.FixValor) was used as a base.
