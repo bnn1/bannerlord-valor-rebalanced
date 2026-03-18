@@ -3,11 +3,11 @@ using HarmonyLib.BUTR.Extensions;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace Bannerlord.FixValor
+namespace Bannerlord.ValorRebalanced
 {
     public class SubModule : MBSubModuleBase
     {
-        private static readonly Harmony Harmony = new("Bannerlord.FixValor");
+        private static readonly Harmony Harmony = new("Bannerlord.ValorRebalanced");
 
         protected override void OnSubModuleLoad()
         {

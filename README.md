@@ -63,11 +63,11 @@ This makes Valor 1 achievable in ~20–100 qualifying battles and Valor 2 in ~80
 ## Installation
 
 1. Install the requirements above if you haven't already.
-2. Extract the `Bannerlord.FixValor` folder into your game's `Modules` directory:
+2. Extract the `Bannerlord.ValorRebalanced` folder into your game's `Modules` directory:
    ```
-   \Modules\Bannerlord.FixValor\
+   \Modules\Bannerlord.ValorRebalanced\
        SubModule.xml
-       bin\Win64_Shipping_Client\Bannerlord.FixValor.dll
+       bin\Win64_Shipping_Client\Bannerlord.ValorRebalanced.dll
    ```
 3. Enable **Valor Rebalanced** in the launcher. Make sure it loads after Harmony and MCM.
 4. Adjust settings in **Mod Options** in-game. No restart required.

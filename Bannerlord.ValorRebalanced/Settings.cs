@@ -2,13 +2,13 @@ using MCM.Abstractions.Attributes;
 using MCM.Abstractions.Attributes.v2;
 using MCM.Abstractions.Base.Global;
 
-namespace Bannerlord.FixValor
+namespace Bannerlord.ValorRebalanced
 {
     internal sealed class Settings : AttributeGlobalSettings<Settings>
     {
-        public override string Id => "Bannerlord.FixValor_v1";
+        public override string Id => "Bannerlord.ValorRebalanced_v1";
         public override string DisplayName => "Valor Rebalanced";
-        public override string FolderName => "Bannerlord.FixValor";
+        public override string FolderName => "Bannerlord.ValorRebalanced";
         public override string FormatType => "json";
 
         [SettingPropertyFloatingInteger(

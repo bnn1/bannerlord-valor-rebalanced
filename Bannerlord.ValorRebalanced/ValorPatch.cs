@@ -6,7 +6,7 @@ using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.CampaignSystem.MapEvents;
 
-namespace Bannerlord.FixValor
+namespace Bannerlord.ValorRebalanced
 {
     internal static class ValorPatch
     {

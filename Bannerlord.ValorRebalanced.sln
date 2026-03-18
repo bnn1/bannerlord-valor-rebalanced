@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bannerlord.FixValor", "Bannerlord.FixValor\Bannerlord.FixValor.csproj", "{D082A8DF-CF58-4C3E-AEA0-CF933A162079}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bannerlord.ValorRebalanced", "Bannerlord.ValorRebalanced\Bannerlord.ValorRebalanced.csproj", "{D082A8DF-CF58-4C3E-AEA0-CF933A162079}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
